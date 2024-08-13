@@ -9,10 +9,10 @@ const COMMENT_ID = generateId();
 function createComment() {
   return {
     id: COMMENT_ID(),
-    avatar: getRandomNum(6, 1),
+    avatar: `img/avatar-${getRandomNum(6, 1)}.svg`,
     comment: getRandomArrayElement(COMMENTS),
     name: getRandomArrayElement(AUTHORS),
-  }
+  };
 }
 
 function createObj() {
@@ -28,23 +28,3 @@ function createObj() {
 
 export const photosData = Array.from({ length: MAX_OBJECT_LENGTH }, createObj);
 
-
-
-const pictureTemplate = document.getElementById('picture-template');
-const picture = document.querySelector('.picture__img');
-const pictureBlock = document.createElement('pictures')
-// pictureBlock.classList.add('.pictures-block')
-photosData.forEach((photo) => {
-
-  const pictureEl = pictureTemplate.content.cloneNode(true);
-  // picture.style.width = 'auto';
-
-  pictureEl.querySelector('.picture__img').src = photo.url;
-  pictureEl.querySelector('.picture__comments').textContent = photo.comments.length;
-  pictureEl.querySelector('.picture__likes').textContent = photo.likes;
-
-  document.body.appendChild(pictureEl);
-});
-
-
-console.log(photosData)

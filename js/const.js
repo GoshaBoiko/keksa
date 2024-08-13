@@ -21,3 +21,6 @@ export const DISCRIPION = [
   'Мой день рождения',
   'Самый счастливый день в жизни',
 ];
+
+export const MAX_COMMENTS_COUNT = 5;
+

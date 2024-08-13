@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.css" />
+
   <title>Кекстаграм</title>
 </head>
 
@@ -16,7 +18,7 @@
     <!-- Фильтрация изображений от других пользователей -->
     <section class="img-filters  img-filters--inactive  container">
       <h2 class="img-filters__title  visually-hidden">Фильтр фотографий</h2>
-      <form class="img-filters__form" action="index.html" method="get" autocomplete="off">
+      <form class="img-filters__form" action="index.html" method="get" autocomplete="off" enctype="multipart/form-data">
         <button type=button class="img-filters__button  img-filters__button--active" id="filter-default">По
           умолчанию</button>
         <button type=button class="img-filters__button" id="filter-random">Случайные</button>
@@ -33,7 +35,7 @@
         <div class="img-upload__wrapper">
           <h2 class="img-upload__title  visually-hidden">Загрузка фотографии</h2>
           <form class="img-upload__form" id="upload-select-image" method="post" enctype="multipart/form-data"
-            autocomplete="off">
+            autocomplete="off" action="https://32.javascript.htmlacademy.pro/kekstagram">
 
             <!-- Изначальное состояние поля для загрузки изображения -->
             <fieldset class="img-upload__start">
@@ -145,7 +147,7 @@
 
     </section>
 
-    <!-- Полноэкранный показ изображения -->
+    <!-- Полноэкранный показ изображения hidden -->
     <section class="big-picture  overlay  hidden">
       <h2 class="big-picture__title  visually-hidden">Просмотр фотографии</h2>
       <div class="big-picture__preview">
@@ -248,7 +250,9 @@
     <div class="img-upload__message  img-upload__message--loading">Загружаем...</div>
   </template>
 
-  <script src="js/mock.js" type="module"></script>
+  <script src="js/main.js" type="module"></script>
+  <script src="./pristine/pristine.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.js"></script>
 </body>
 
 </html>
