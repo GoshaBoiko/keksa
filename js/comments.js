@@ -1,9 +1,14 @@
 import { MAX_COMMENTS_COUNT } from './const.js';
+import { getRandomNum, getRandomArrayElement } from './utils.js';
+import { AUTHORS } from './mock.js';
+import { COMMENT_ID } from './mock.js';
 
 const commentsLength = document.querySelector('.social__comment-count');
 const commentsList = document.querySelector('.social__comments');
 const commentItem = commentsList.querySelector('.social__comment');
 const showCommentsBtn = document.querySelector('.social__comments-loader');
+const newTextComment = document.querySelector('.social__footer-text');
+const addCommentBtn = document.querySelector('.social__footer-btn');
 let currentComments = [];
 
 // убираем кнопку если меньше 6 коментов при открытии карточки
@@ -36,9 +41,10 @@ const showMoreComments = (comments) => {
   }
 
   commentsList.append(fragment);
+
 }; // отрисовка
 
-export const addComments = (comments) => { // показ 5 коментов
+export const addComments = (comments) => { // показ 5 комментов
   commentsList.innerHTML = '';
   currentComments = comments;
 
@@ -60,3 +66,29 @@ function handleShowCommentsMore() {
 export function removeHandleShowCommentsMore () {
   showCommentsBtn.removeEventListener('click', handleShowCommentsMore);
 }
+
+function addNewComment() {
+  const commentText = newTextComment.value;
+  if (commentText) {
+    const newComment = {
+      id: COMMENT_ID(),
+      avatar: `img/avatar-${getRandomNum(6, 1)}.svg`,
+      comment: commentText,
+      name: getRandomArrayElement(AUTHORS),
+    };
+    pushComments(newComment);
+    newTextComment.value = '';
+    showMoreComments(currentComments);
+    addComments(currentComments)
+    addCommentsCount(currentComments.length);
+  }
+}
+
+function pushComments(newComment) {
+  currentComments.unshift(newComment);
+  // console.log(currentComments);
+}
+
+addCommentBtn.addEventListener('click', addNewComment)
+
+

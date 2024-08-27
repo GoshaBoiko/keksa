@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 2em 3em;
+      font-family: sans-serif;
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      margin: 0;
+      padding: 0.2em 0.1em;
+      border: 0.15em solid #bbb;
+      border-radius: 0.3em;
+      outline: none;
+      background-color: #fff;
+      color: #000;
+      font-family: sans-serif;
+      font-size: 1em;
+      line-height: 1.4;
+      transition: border-color 0.1s linear;
+    }
+
+    select {
+      padding-top: 0.4em;
+      padding-bottom: 0.4em;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+      border-color: #0060df;
+    }
+
+    input[type="text"] {
+      width: 18em;
+    }
+
+    input[type="number"] {
+      width: 6em;
+    }
+
+    button {
+      margin: 0;
+      padding: 0.4em 1em;
+      border: 0.15em solid #0060df;
+      border-radius: 0.3em;
+      outline: none;
+      background-color: #0060df;
+      color: #eff6ff;
+      font-family: sans-serif;
+      font-size: 1.2em;
+      line-height: 1.2;
+      transition: color 0.1s linear, box-shadow 0.1s linear;
+    }
+
+    button:hover,
+    button:focus {
+      color: #fff;
+      box-shadow: 0 0.1em 1em #0061df60;
+    }
+
+    .form__error {
+      display: block;
+      font-size: 0.85em;
+      color: #c00;
+    }
+  </style>
+</head>
+
+<body>
+  <form class="form" autocomplete="off">
+    <h3>Доставка Кексокорма</h3>
+
+    <p class="form__item">
+      <label for="nickname">Имя питомца для открытки:</label>
+      <br>
+      <input type="text" name="nickname" id="nickname" required placeholder="Кексик" minlength="2" maxlength="50"
+        data-pristine-required-message="Укажите имя питомца" data-pristine-minlength-message="Минимум 2 символа"
+        data-pristine-maxlength-message="Максимум 50 символов">
+    </p>
+
+    <p>
+      Размер:
+      <label><input type="radio" name="unit" value="s" checked>S</label>
+      <label><input type="radio" name="unit" value="m">M</label>
+    </p>
+
+    <p class="form__item">
+      <label for="amount">Количество:</label>
+      <br>
+      <input type="number" name="amount" id="amount" placeholder="10">
+    </p>
+
+    <p class="form__item">
+      <select name="delivery">
+        <option value="Доставка" selected>Доставка</option>
+        <option value="Самовывоз">Самовывоз</option>
+      </select>
+      <select name="date">
+        <option value="Сегодня" selected>Сегодня</option>
+        <option value="Завтра">Завтра</option>
+        <option value="На выходных">На выходных</option>
+      </select>
+    </p>
+
+    <p>
+      <button>Заказать</button>
+    </p>
+  </form>
+
+  <script src="./pristine/pristine.min.js"></script>
+
+  <script>
+    const orderForm = document.querySelector('.form');
+    const nickname = orderForm.querySelector('#nickname');
+    const amountField = orderForm.querySelector('#amount');
+    const deliveryField = orderForm.querySelector('[name="delivery"]');
+    const dateField = orderForm.querySelector('[name="date"]');
+
+    const deliveryOption = {
+      'Доставка': ['Завтра', 'На выходных'],
+      'Самовывоз': ['Сегодня', 'Завтра']
+    }
+
+    const FormMessage = {
+      ErrorMessage: 'От 2 до 50 символов',
+    }
+
+    const maxAmount = {
+      's': 10,
+      'm': 5
+    }
+
+    const pristine = new Pristine(orderForm, {
+      classTo: 'form__item', // Элемент, на который будут добавляться классы
+      errorClass: 'form__item--invalid', // Класс, обозначающий невалидное поле
+      successClass: 'form__item--valid', // Класс, обозначающий валидное поле
+      errorTextParent: 'form__item', // Элемент, куда будет выводиться текст с ошибкой
+      errorTextTag: 'span', // Тег, который будет обрамлять текст ошибки
+      errorTextClass: 'form__error' // Класс для элемента с текстом ошибки
+    }); // 3 параметр false, что Pristine не валидировал форму по мере ввода
+
+    function validateNickname(value) {
+      return value.length >= 2 && value.length <= 50;
+    }
+
+    function validateAmount(value) {
+      const unit = orderForm.querySelector('[name="unit"]:checked');
+      return value.length && parseInt(value) <= maxAmount[unit.value];
+    }
+
+    function getAmountErrorMessage() {
+      const unit = orderForm.querySelector('[name="unit"]:checked');
+      return `Не больше ${maxAmount[unit.value]} штук в одни руки`;
+    }
+
+    function validateDelivery() {
+      return deliveryOption[deliveryField.value].includes(dateField.value);
+    }
+
+    function getDeliveryErrorMessage() {
+      return `
+        ${deliveryField.value}
+        ${dateField.value.toLowerCase()}
+        ${deliveryField.value === 'Доставка' ? 'невозможна' : 'невозможен'}
+      `;
+    }
+
+    pristine.addValidator(
+      amountField,
+      validateAmount,
+      getAmountErrorMessage
+    );
+
+    pristine.addValidator(
+      nickname,
+      validateNickname,
+      FormMessage.ErrorMessage
+    );
+
+    pristine.addValidator(
+      deliveryField,
+      validateDelivery,
+      getDeliveryErrorMessage
+    );
+
+    pristine.addValidator(
+      dateField,
+      validateDelivery,
+      getDeliveryErrorMessage
+    );
+
+    function onUnitChange() {
+      amountField.placeholder = maxAmount[this.value];
+      pristine.validate(amountField);
+    }
+
+    orderForm
+      .querySelectorAll('[name="unit"]')
+      .forEach((item) => item.addEventListener('change', onUnitChange));
+
+    orderForm.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      pristine.validate();
+    })
+  </script>
+</body>
+
+</html>

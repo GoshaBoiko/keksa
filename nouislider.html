@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./nouislider/nouislider.css">
+  <style>
+    body {
+      font-family: sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    input {
+      font: inherit;
+    }
+
+    .level-form {
+      max-width: 300px;
+      padding: 30px 30px;
+      background-color: #f1ede0;
+    }
+
+    .level-form__field {
+      margin-top: 25px;
+      margin-bottom: 0;
+      display: flex;
+      align-items: baseline;
+    }
+
+    .level-form__label {
+      margin-right: 5px;
+    }
+
+    .level-form__value {
+      padding: 5px 10px;
+      width: 80px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.75);
+    }
+
+    .level-form__value:focus {
+      border-color: #3fb8af;
+      background-color: rgba(255, 255, 255, 1);
+    }
+  </style>
+</head>
+
+<body>
+  <form class="level-form">
+    <div class="level-form__slider" id="slider"></div>
+    <p class="level-form__field">
+      <label class="level-form__label" for="price">Цена</label>
+      <input class="level-form__value" type="text" id="price">
+    </p>
+    <p class="level-form__field">
+      <label>
+        <input class="level-form__special" type="checkbox"> Я оптовик
+      </label>
+    </p>
+  </form>
+
+  <script src="./nouislider/nouislider.js"></script>
+  <script>
+    const sliderElement = document.querySelector('#slider');
+    const valueElement = document.querySelector('.level-form__value');
+    const specialElement = document.querySelector('.level-form__special');
+
+    noUiSlider.create(sliderElement, {
+      range: {
+        min: 0,
+        max: 100
+      },
+
+      start: 80,
+      step: 1,
+      connect: 'lower',
+      format: {
+        to: function(value) {
+          if (Number.isInteger(value)) {
+            return value.toFixed(0);
+          }
+
+          return value.toFixed(1);
+        },
+        from: function(value) {
+          return parseFloat(value);
+        }
+      }
+    })
+
+    sliderElement.noUiSlider.on('update', () => {
+      valueElement.value = sliderElement.noUiSlider.get();
+    });
+
+    specialElement.addEventListener('change', (evt) => {
+      if (evt.target.checked) {
+        sliderElement.noUiSlider.updateOptions({
+          range: {
+            min: 1,
+            max: 10
+          },
+
+          start: 8,
+          step: 0.1,
+        })
+      } else {
+        sliderElement.noUiSlider.updateOptions({
+          range: {
+            min: 0,
+            max: 100
+          },
+
+          start: 80,
+          step: 1,
+        });
+
+        // sliderElement.noUiSlider.set(80);
+      }
+    })
+
+    sliderElement.setAttribute('disabled', true)
+    sliderElement.removeAttribute('disabled');
+    sliderElement.noUiSlider.destroy();
+  </script>
+</body>
+
+</html>

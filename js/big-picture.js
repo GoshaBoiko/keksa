@@ -9,6 +9,8 @@ const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
 const image = bigPicture.querySelector('.big-picture__img img');
 const imageDesc = bigPicture.querySelector('.social__caption');
 const imageLikes = bigPicture.querySelector('.likes-count');
+const imageLikesCount = document.querySelector('.picture__likes');
+const imageCommentsCount = document.querySelector('.picture__comments');
 
 export const closePopup = ()=> {
   bigPicture.classList.add(BIG_PICTURE_HIDDEN);
@@ -56,15 +58,17 @@ let countLikes = 0;
 let isLiked = false;
 
 const addLikes = ()=> {
-
+  imageLikes.classList.remove('active');
   imageLikes.addEventListener('click', ()=> {
     if (!isLiked) {
       countLikes = Number(imageLikes.textContent) + 1;
       imageLikes.textContent = countLikes;
+      imageLikes.classList.add('active');
       isLiked = true;
     }  else {
       countLikes = Number(imageLikes.textContent) - 1;
       imageLikes.textContent = countLikes;
+      imageLikes.classList.remove('active');
       isLiked = false;
     }
   })
