@@ -1,4 +1,4 @@
-import {photosData} from './mock.js';
+import {LOCAL_STORAGE_DATA_KEY} from './const.js';
 import {isEscape} from './utils.js';
 import {addComments, removeHandleShowCommentsMore} from './comments.js';
 
@@ -9,8 +9,6 @@ const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
 const image = bigPicture.querySelector('.big-picture__img img');
 const imageDesc = bigPicture.querySelector('.social__caption');
 const imageLikes = bigPicture.querySelector('.likes-count');
-const imageLikesCount = document.querySelector('.picture__likes');
-const imageCommentsCount = document.querySelector('.picture__comments');
 
 export const closePopup = ()=> {
   bigPicture.classList.add(BIG_PICTURE_HIDDEN);
@@ -47,7 +45,7 @@ function handleClosePopupKeydown(evt) {
 }
 
 export const handleOpenPopupClick = (evt)=> {
-  // const pictureObj = photosData.find((item) => item.id === Number(evt.currentTarget.id));
+  const photosData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_DATA_KEY));
   const pictureObj = photosData.find((item) => item.id === Number(evt.currentTarget.id));
   setBigPicture(pictureObj);
   openPopup();

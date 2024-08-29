@@ -1,7 +1,6 @@
 import { MAX_COMMENTS_COUNT } from './const.js';
 import { getRandomNum, getRandomArrayElement } from './utils.js';
-import { AUTHORS } from './mock.js';
-import { COMMENT_ID } from './mock.js';
+import { AUTHORS, COMMENT_ID} from './mock.js';
 
 const commentsLength = document.querySelector('.social__comment-count');
 const commentsList = document.querySelector('.social__comments');
@@ -31,12 +30,12 @@ const addCommentsCount = (number) => {
 const showMoreComments = (comments) => {
   const fragment = document.createDocumentFragment();
   for (let i = 0; i < comments.length; i++) {
-    const { avatar, comment, name } = comments[i];
+    const { avatar, message, name } = comments[i];
     const commentTemplate = commentItem.cloneNode(true);
     const avatarImage = commentTemplate.querySelector('.social__picture');
     avatarImage.src = avatar;
     avatarImage.alt = name;
-    commentTemplate.querySelector('.social__text').textContent = comment;
+    commentTemplate.querySelector('.social__text').textContent = message;
     fragment.append(commentTemplate);
   }
 
@@ -73,7 +72,7 @@ function addNewComment() {
     const newComment = {
       id: COMMENT_ID(),
       avatar: `img/avatar-${getRandomNum(6, 1)}.svg`,
-      comment: commentText,
+      message: commentText,
       name: getRandomArrayElement(AUTHORS),
     };
     pushComments(newComment);

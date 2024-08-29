@@ -1,4 +1,5 @@
-import {closeEditForm, handleKeyPress} from './effectPhoto.js'
+import {closeEditForm, handleKeyPress} from './effectPhoto.js';
+import {makeRequest} from './api.js';
 
 const orderForm = document.querySelector('.img-upload__form');
 const btnSubmitForm = document.querySelector('.img-upload__submit');
@@ -41,28 +42,36 @@ const isNoneHasTag = (value) => value === '';
 
 // Функция для проверки начала хэштега
 const validateHasTagStart = (value) => {
-  if (isNoneHasTag(value)) return true;
+  if (isNoneHasTag(value)) {
+    return true;
+  }
   const arrHasTags = value.toLowerCase().split(' ');
   return arrHasTags.every(tag => tag.startsWith('#'));
 };
 
 // Функция для проверки формата хэштегов
 const validateHasTagFormat = (value) => {
-  if (isNoneHasTag(value)) return true;
+  if (isNoneHasTag(value)) {
+    return true;
+  }
   const arrHasTags = value.toLowerCase().split(' ');
   return arrHasTags.every(tag => regex.test(tag));
 };
 
 // Функция для проверки длины хэштегов
 const validateHasTagLength = (value) => {
-  if (isNoneHasTag(value)) return true;
+  if (isNoneHasTag(value)) {
+    return true;
+  }
   const arrHasTags = value.toLowerCase().split(' ');
   return arrHasTags.every(tag => tag.length <= 20);
 };
 
 // Функция для проверки уникальности хэштегов
 const validateHasTagUnique = (value) => {
-  if (isNoneHasTag(value)) return true;
+  if (isNoneHasTag(value)) {
+    return true;
+  }
   const arrHasTags = value.toLowerCase().split(' ');
   const uniqueTags = new Set(arrHasTags);
   return uniqueTags.size === arrHasTags.length;
@@ -70,7 +79,9 @@ const validateHasTagUnique = (value) => {
 
 // Функция для проверки количества хэштегов
 const validateHasTagCount = (value) => {
-  if (isNoneHasTag(value)) return true;
+  if (isNoneHasTag(value)) {
+    return true;
+  }
   const arrHasTags = value.toLowerCase().split(' ');
   return arrHasTags.length <= 5;
 };
@@ -106,19 +117,22 @@ pristine.addValidator(
   errorText.hasTagFive
 );
 
-
 // Обработка отправки формы
 orderForm.addEventListener('submit', (event) => {
   event.preventDefault(); // Отменяем стандартное поведение формы
-
   if (pristine.validate()) {
-    closeEditForm();
-    showSuccessMessage();
-    console.log('Форма успешно отправлена');
-  } else {
-    console.log('Ошибка в заполнении формы');
-    showSuccessMessageError();
-    btnSubmitForm.style.backgroundColor = 'rgb(255 255 255 / 20%)';
+    makeRequest(
+      () => {
+        closeEditForm();
+        showSuccessMessage();
+      },
+      () => {
+        showSuccessMessageError();
+        btnSubmitForm.style.backgroundColor = 'rgb(255 255 255 / 20%)';
+      },
+      'POST',
+      new FormData(orderForm)
+    );
   }
 });
 

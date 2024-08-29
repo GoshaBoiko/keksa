@@ -11,7 +11,6 @@ const scaleBiggerImagesBtn = document.querySelector('.scale__control--bigger'); 
 const scaleControl = document.querySelector('.scale__control--value');
 const textHashtags = document.querySelector('.text__hashtags');
 const textDescription = document.querySelector('.text__description');
-const formErrorText = document.querySelector('.form__error');
 
 fileInput.addEventListener('change', () => {
   const file = fileInput.files[0]; // Получаем файл из input'а
